@@ -1,5 +1,5 @@
 #i = int(input("ile kolumn? "))
-data = open("data-low.txt")
+data = open("private/data-low.txt")
 table = []
 tempTuple = {}
 
