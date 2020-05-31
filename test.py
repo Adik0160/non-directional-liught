@@ -41,5 +41,11 @@ for i in range(0, int(len(data)/10)):
 cutOut[0].extend(['cosfiu [-]', 'fi [lm]', 'efficiency [lm/W]'])
 
 # todo generate CSV and make var from start parameters
+
+with open("private/out.csv", 'w', newline='') as f:
+    thewriter = csv.writer(f)
+    for line in cutOut:
+        thewriter.writerow(line)
+
 print(cutOut)
 # with open("/private/data-low.txt") as file: 
