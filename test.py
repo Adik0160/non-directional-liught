@@ -42,4 +42,4 @@ cutOut[0].extend(['cosfiu [-]', 'fi [lm]', 'efficiency [lm/W]'])
 
 # todo generate CSV and make var from start parameters
 print(cutOut)
-# with open("/private/data-low.txt") as file:
+# with open("/private/data-low.txt") as file: 
