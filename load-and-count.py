@@ -1,10 +1,10 @@
 import csv
 
 openPath = input("ścieżka do pliku TXT ")
-savePath = input("ścieżka do zapisania plikus CSV ")
-phiw = input("wprowadź Φw (strimień świetlny wzorca) ")
-deltaw = input("prowadź Δw (Wskazanie miernika prądu fotoelektrycznego) ")
-lambada = int(input("lambda? 0/1"))
+savePath = openPath.replace('txt', 'csv') # input("ścieżka do zapisania plikus CSV ")
+phiw = 641 # input("wprowadź Φw (strimień świetlny wzorca) ")
+deltaw = 0.0948 # input("prowadź Δw (Wskazanie miernika prądu fotoelektrycznego) ")
+lambada = int(input("lambda? 0/1 "))
 
 data = []
 cutOut = []
