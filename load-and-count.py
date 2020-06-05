@@ -1,13 +1,5 @@
 import csv
 
-openPath = input("ścieżka do pliku TXT ")
-savePath = openPath.replace('txt', 'csv') # input("ścieżka do zapisania plikus CSV ")
-phiw = 641 # input("wprowadź Φw (strimień świetlny wzorca) ")
-deltaw = 0.0948 # input("prowadź Δw (Wskazanie miernika prądu fotoelektrycznego) ")
-lambada = int(input("lambda? 0/1 "))
-
-data = []
-cutOut = []
 def to_matrix(l, n):
     return [l[i:i + n] for i in range(0, len(l), n)]
 
@@ -24,48 +16,60 @@ def fi(phiw, deltax, deltaw):    # lm
 def n(fi, pu):          # efficiency
     return fi/pu
 
-with open(openPath) as f:
-    for line in f:
-        data.append(line.rstrip())
+def main():
+    openPath = input("ścieżka do pliku TXT ")
+    savePath = openPath.replace('txt', 'csv')  # input("ścieżka do zapisania plikus CSV ")
+    phiw = 641  # input("wprowadź Φw (strimień świetlny wzorca) ")
+    deltaw = 0.0948  # input("prowadź Δw (Wskazanie miernika prądu fotoelektrycznego) ")
+    lambada = int(input("lambda? 0/1 "))
 
-if lambada:
-    data = to_matrix(data, 6)
-else:
-    data = to_matrix(data, 5)
+    data = []
+    cutOut = []
+    with open(openPath) as f:
+        for line in f:
+            data.append(line.rstrip())
 
-for i in range(1, len(data)):
-    data[i][0] = int(time_to_sec(data[i][0]))           # time
-    data[i][1] = float(data[i][1].replace(',', '.'))    # U
-    data[i][2] = float(data[i][2].replace(',', '.'))    # I
-    data[i][3] = float(data[i][3].replace(',', '.'))    # P
     if lambada:
-        data[i][4] = float(data[i][4].replace(',', '.'))    # lambda
-        data[i][5] = float(data[i][5].replace(',', '.'))    # delta x
-
-        data[i].append(float(cosfiu(data[i][3], data[i][1], data[i][2])))  # cosFiu
-        data[i].append(float(fi(float(phiw), data[i][5], float(deltaw))))  # fi
-        data[i].append(float(n(data[i][7], data[i][3])))  # efficiency
+        data = to_matrix(data, 6)
     else:
-        data[i][4] = float(data[i][4].replace(',', '.'))  # delta x
-        data[i].append(float(cosfiu(data[i][3], data[i][1], data[i][2])))  # cosFiu
-        data[i].append(float(fi(float(phiw), data[i][4], float(deltaw))))  # fi
-        data[i].append(float(n(data[i][6], data[i][3])))  # efficiency
+        data = to_matrix(data, 5)
+
+    for i in range(1, len(data)):
+        data[i][0] = int(time_to_sec(data[i][0]))           # time
+        data[i][1] = float(data[i][1].replace(',', '.'))    # U
+        data[i][2] = float(data[i][2].replace(',', '.'))    # I
+        data[i][3] = float(data[i][3].replace(',', '.'))    # P
+        if lambada:
+            data[i][4] = float(data[i][4].replace(',', '.'))    # lambda
+            data[i][5] = float(data[i][5].replace(',', '.'))    # delta x
+
+            data[i].append(float(cosfiu(data[i][3], data[i][1], data[i][2])))  # cosFiu
+            data[i].append(float(fi(float(phiw), data[i][5], float(deltaw))))  # fi
+            data[i].append(float(n(data[i][7], data[i][3])))  # efficiency
+        else:
+            data[i][4] = float(data[i][4].replace(',', '.'))  # delta x
+            data[i].append(float(cosfiu(data[i][3], data[i][1], data[i][2])))  # cosFiu
+            data[i].append(float(fi(float(phiw), data[i][4], float(deltaw))))  # fi
+            data[i].append(float(n(data[i][6], data[i][3])))  # efficiency
 
 
-firstTime = int(0)
+    firstTime = int(0)
 
-for i in range(0, int(len(data)/10)):
-    cutOut.append(data[i*10])
-    if i == 1:
-        firstTime = cutOut[i][0]
-    if i >= 1:
-        cutOut[i][0] -= firstTime
+    for i in range(0, int(len(data)/10)):
+        cutOut.append(data[i*10])
+        if i == 1:
+            firstTime = cutOut[i][0]
+        if i >= 1:
+            cutOut[i][0] -= firstTime
 
-cutOut[0].extend(['cosfiu [-]', 'fi [lm]', 'efficiency [lm/W]'])
+    cutOut[0].extend(['cosfiu [-]', 'fi [lm]', 'efficiency [lm/W]'])
 
 
-with open(savePath, 'w', newline='') as f:
-    thewriter = csv.writer(f)
-    for line in cutOut:
-        thewriter.writerow(line)
-print(cutOut)
+    with open(savePath, 'w', newline='') as f:
+        thewriter = csv.writer(f)
+        for line in cutOut:
+            thewriter.writerow(line)
+    print(cutOut)
+
+if __name__ == '__main__':
+    main()
